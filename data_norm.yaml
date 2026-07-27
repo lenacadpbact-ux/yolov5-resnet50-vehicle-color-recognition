@@ -1,0 +1,17 @@
+names:
+- black
+- blue
+- green
+- red
+- white
+- yellow
+nc: 6
+roboflow:
+  license: CC BY 4.0
+  project: cars-color-recognition
+  url: https://universe.roboflow.com/final-project-jwpes/cars-color-recognition/dataset/2
+  version: 2
+  workspace: final-project-jwpes
+test: /content/drive/MyDrive/ASSIGNMENT/Assignment_Project_1/dataset/test/images
+train: /content/drive/MyDrive/ASSIGNMENT/Assignment_Project_1/dataset/train/images
+val: /content/drive/MyDrive/ASSIGNMENT/Assignment_Project_1/dataset/valid/images
