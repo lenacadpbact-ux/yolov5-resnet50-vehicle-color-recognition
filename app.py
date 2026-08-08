@@ -51,7 +51,7 @@ def ensure_weights():
 ensure_weights()
 
 # ── Load YOLOv5 (via torch.hub, using your custom-trained weights) ──────────
-yolo_model = torch.hub.load("ultralytics/yolov5", "custom", path=WEIGHTS_YOLO, force_reload=False)
+yolo_model = torch.hub.load("ultralytics/yolov5", "custom", path=WEIGHTS_YOLO, force_reload=False, trust_repo=True)
 yolo_model.to(DEVICE).eval()
 
 # ── Load ResNet-50 fallback classifier ───────────────────────────────────────
