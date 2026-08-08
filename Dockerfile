@@ -15,6 +15,9 @@ COPY app.py .
 
 # Cloud Run sets $PORT automatically (defaults to 8080)
 ENV PORT=8080
+# Skip Matplotlib's slow font-cache build on every cold start — pulled in
+# indirectly by ultralytics, not used directly by this app
+ENV MPLBACKEND=Agg
 EXPOSE 8080
 
 CMD ["python", "app.py"]
