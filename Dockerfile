@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Pre-build Matplotlib's font cache now, during the image build (fast, unthrottled),
+# so it never has to rebuild it at container startup, where CPU may be limited
+RUN python -c "import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt; plt.figure(); plt.savefig('/tmp/warmup.png')"
+
 COPY app.py .
 
 # Cloud Run sets $PORT automatically (defaults to 8080)
