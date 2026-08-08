@@ -50,9 +50,9 @@ def ensure_weights():
 
 ensure_weights()
 
-# ── Load YOLOv5 (via torch.hub, using your custom-trained weights) ──────────
-yolo_model = torch.hub.load("ultralytics/yolov5", "custom", path=WEIGHTS_YOLO, force_reload=False, trust_repo=True)
-yolo_model.to(DEVICE).eval()
+# ── Load YOLOv5 (via ultralytics package — lighter than torch.hub cloning) ──
+from ultralytics import YOLO
+yolo_wrapper = YOLO(WEIGHTS_YOLO)
 
 # ── Load ResNet-50 fallback classifier ───────────────────────────────────────
 resnet = models.resnet50(weights=None)
@@ -73,16 +73,20 @@ def predict(image: Image.Image):
         return None, "Please upload an image."
 
     img_np = np.array(image.convert("RGB"))
-    results = yolo_model(img_np)
-    detections = results.xyxy[0].cpu().numpy()  # x1, y1, x2, y2, conf, cls
+    results = yolo_wrapper.predict(img_np, verbose=False)
+    r = results[0]
 
-    if len(detections) == 0:
+    if r.boxes is None or len(r.boxes) == 0:
         return image, "No vehicle detected. Try a clearer photo."
 
     annotated = img_np.copy()
     labels_out = []
 
-    for x1, y1, x2, y2, conf, cls in detections:
+    boxes_xyxy = r.boxes.xyxy.cpu().numpy()
+    confs = r.boxes.conf.cpu().numpy()
+    clss = r.boxes.cls.cpu().numpy()
+
+    for (x1, y1, x2, y2), conf, cls in zip(boxes_xyxy, confs, clss):
         x1, y1, x2, y2 = map(int, [x1, y1, x2, y2])
         yolo_label = CNN_CLASSES[int(cls)] if int(cls) < len(CNN_CLASSES) else "unknown"
 
