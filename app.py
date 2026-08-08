@@ -128,7 +128,6 @@ demo = gr.Interface(
         "Upload any car photo to try it out!"
     ),
     examples=None,  # add example image paths here once uploaded to the Space
-    allow_flagging="never",
 )
 
 if __name__ == "__main__":
